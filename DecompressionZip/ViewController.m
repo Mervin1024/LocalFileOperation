@@ -63,7 +63,6 @@
     ZipArchive *zipFile = [[ZipArchive alloc] init];
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [path objectAtIndex:0];
-    NSLog(@"documentPath:%@",documentPath);
     
     // 以解压包名称创建新文件夹
     NSString *zipDirectoryPath = [documentPath stringByAppendingPathComponent:fileName];

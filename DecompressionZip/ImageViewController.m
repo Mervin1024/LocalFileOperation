@@ -54,13 +54,23 @@
         if ([strings count] > 1) {
             NSString *first = [strings firstObject];
             NSArray *items = [tableData allKeys];
-            for (NSString *item in items) {
-                if ([first isEqualToString:item]) {
-                    
+            BOOL have = NO;
+            for (int i = 0; i < [items count]; i++) {
+                if (![first isEqualToString:items[i]]) {
+                    continue;
                 }
+                have = YES;
+                NSMutableArray *details = [tableData objectForKey:items[i]];
+                [details addObject:path];
+            }
+            if (!have) {
+                NSMutableArray *details = [NSMutableArray array];
+                [details addObject:path];
+                [tableData setObject:details forKey:first];
             }
         }
     }
+//    NSLog(@"%@",tableData);
 }
 
 - (void)backAction:(id)sender{
@@ -70,11 +80,16 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 0;
+    return [tableData allKeys].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return nil;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DetailCell"];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DetailCell"];
+    }
+    cell.textLabel.text = [[tableData allKeys] objectAtIndex:indexPath.row];
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
