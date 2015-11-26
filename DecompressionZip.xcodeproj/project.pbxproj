@@ -29,6 +29,7 @@
 		EEEFB2F31C06E93B002828AB /* BoundaryView.png in Resources */ = {isa = PBXBuildFile; fileRef = EEEFB2E71C06E93B002828AB /* BoundaryView.png */; settings = {ASSET_TAGS = (); }; };
 		EEEFB2F41C06E93B002828AB /* bounds.png in Resources */ = {isa = PBXBuildFile; fileRef = EEEFB2E81C06E93B002828AB /* bounds.png */; settings = {ASSET_TAGS = (); }; };
 		EEEFB2F91C06FA90002828AB /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEEFB2F81C06FA90002828AB /* ImageViewController.m */; settings = {ASSET_TAGS = (); }; };
+		EEEFB2FC1C071426002828AB /* DetailtTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEEFB2FB1C071426002828AB /* DetailtTableViewController.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,8 @@
 		EEEFB2E81C06E93B002828AB /* bounds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bounds.png; sourceTree = "<group>"; };
 		EEEFB2F71C06FA90002828AB /* ImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewController.h; sourceTree = "<group>"; };
 		EEEFB2F81C06FA90002828AB /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewController.m; sourceTree = "<group>"; };
+		EEEFB2FA1C071426002828AB /* DetailtTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailtTableViewController.h; sourceTree = "<group>"; };
+		EEEFB2FB1C071426002828AB /* DetailtTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailtTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +161,8 @@
 				EEEFB2AE1C06CAD6002828AB /* ViewController.m */,
 				EEEFB2F71C06FA90002828AB /* ImageViewController.h */,
 				EEEFB2F81C06FA90002828AB /* ImageViewController.m */,
+				EEEFB2FA1C071426002828AB /* DetailtTableViewController.h */,
+				EEEFB2FB1C071426002828AB /* DetailtTableViewController.m */,
 				EEEFB2B01C06CAD6002828AB /* Main.storyboard */,
 				EEEFB2B31C06CAD6002828AB /* Assets.xcassets */,
 				EEEFB2B51C06CAD6002828AB /* LaunchScreen.storyboard */,
@@ -392,6 +397,7 @@
 			files = (
 				EEEFB2AF1C06CAD6002828AB /* ViewController.m in Sources */,
 				EEEFB2AC1C06CAD6002828AB /* AppDelegate.m in Sources */,
+				EEEFB2FC1C071426002828AB /* DetailtTableViewController.m in Sources */,
 				EEEFB2F91C06FA90002828AB /* ImageViewController.m in Sources */,
 				EEEFB2A91C06CAD6002828AB /* main.m in Sources */,
 			);

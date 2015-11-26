@@ -8,8 +8,11 @@
 
 #import "ImageViewController.h"
 
-@interface ImageViewController ()
+@interface ImageViewController ()<UITableViewDataSource,UITableViewDelegate>{
+    NSMutableDictionary *tableData;
+}
 
+@property (weak, nonatomic) IBOutlet UITableView *direcTableView;
 @end
 
 @implementation ImageViewController
@@ -19,8 +22,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor yellowColor];
     self.title = [NSString stringWithFormat:@"%@",[directories firstObject]];
+    
     // Do any additional setup after loading the view.
     [self setBackBarButton];
+    [self initTableData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,10 +47,38 @@
     self.navigationItem.leftBarButtonItem = leftBarItem;
 }
 
+- (void)initTableData{
+    tableData = [NSMutableDictionary dictionaryWithCapacity:10];
+    for (NSString *path in directories) {
+        NSArray *strings = [path componentsSeparatedByString:@"/"];
+        if ([strings count] > 1) {
+            NSString *first = [strings firstObject];
+            NSArray *items = [tableData allKeys];
+            for (NSString *item in items) {
+                if ([first isEqualToString:item]) {
+                    
+                }
+            }
+        }
+    }
+}
+
 - (void)backAction:(id)sender{
     [self dismissViewControllerAnimated:YES completion:^{
         
     }];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 69;
 }
 
 /*
