@@ -54,7 +54,19 @@
                     <view key="view" contentMode="scaleToFill" id="WTo-fb-GpS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="EV6-6K-yf8">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="joB-Bw-acZ" firstAttribute="top" secondItem="EV6-6K-yf8" secondAttribute="bottom" id="8V5-Et-4fQ"/>
+                            <constraint firstItem="EV6-6K-yf8" firstAttribute="leading" secondItem="WTo-fb-GpS" secondAttribute="leading" id="kyS-3p-4x6"/>
+                            <constraint firstAttribute="trailing" secondItem="EV6-6K-yf8" secondAttribute="trailing" id="noB-Ta-79E"/>
+                            <constraint firstItem="EV6-6K-yf8" firstAttribute="top" secondItem="u6y-xk-xNJ" secondAttribute="bottom" id="xJg-lP-IVR"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="825-Ik-9AV"/>
                 </viewController>
