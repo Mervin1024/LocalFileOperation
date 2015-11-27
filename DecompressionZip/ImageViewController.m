@@ -6,25 +6,36 @@
 //  Copyright © 2015年 sh219. All rights reserved.
 //
 
+
 #import "ImageViewController.h"
 
+@implementation FilePath
+
+
+@end
+
 @interface ImageViewController ()<UITableViewDataSource,UITableViewDelegate>{
-    NSMutableDictionary *tableData;
+    NSMutableArray *tableData;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *direcTableView;
 @end
 
 @implementation ImageViewController
-@synthesize directories;
+@synthesize directories, directoryPath, isRoot;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor yellowColor];
-    self.title = [NSString stringWithFormat:@"%@",[directories firstObject]];
+//    self.title = [NSString stringWithFormat:@"%@",[directories firstObject]];
     
     // Do any additional setup after loading the view.
-    [self setBackBarButton];
+    if (isRoot) {
+        [self setBackBarButtonWithType:BankButtonTypeDismiss];
+    }else{
+        [self setBackBarButtonWithType:BankButtonTypeRevoke];
+    }
+    
     [self initTableData];
 }
 
@@ -33,54 +44,82 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setBackBarButton{
+- (void)setBackBarButtonWithType:(BankButtonType)type{
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.backgroundColor = [UIColor clearColor];
-    backButton.frame = CGRectMake(0, 0, 50, 33);
+    backButton.frame = CGRectMake(0, 0, 60, 33);
     backButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
     backButton.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [backButton setTitle:@"返回" forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont systemFontOfSize:17];
     [backButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
+    if (BankButtonTypeDismiss == type) {
+        [backButton setTitle:@"取消" forState:UIControlStateNormal];
+        [backButton addTarget:self action:@selector(dismissAction:) forControlEvents:UIControlEventTouchUpInside];
+    }else{
+        [backButton setTitle:@"上一级" forState:UIControlStateNormal];
+        [backButton addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
     UIBarButtonItem *leftBarItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     self.navigationItem.leftBarButtonItem = leftBarItem;
 }
 
 - (void)initTableData{
-    tableData = [NSMutableDictionary dictionaryWithCapacity:10];
+    tableData = [NSMutableArray arrayWithCapacity:10];
     for (NSString *path in directories) {
         NSArray *strings = [path componentsSeparatedByString:@"/"];
         if ([strings count] > 1) {
             NSString *first = [strings firstObject];
-            NSArray *items = [tableData allKeys];
             BOOL have = NO;
-            for (int i = 0; i < [items count]; i++) {
-                if (![first isEqualToString:items[i]]) {
+            NSString *childPath = [path substringFromIndex:[first length]+1];
+            for (int i = 0; i < [tableData count]; i++) {
+                FilePath *dataPath = [tableData objectAtIndex:i];
+                if (![first isEqualToString:dataPath.name]) {
                     continue;
                 }
                 have = YES;
-                NSMutableArray *details = [tableData objectForKey:items[i]];
-                [details addObject:path];
+                [dataPath.childPaths addObject:childPath];
             }
             if (!have) {
                 NSMutableArray *details = [NSMutableArray array];
-                [details addObject:path];
-                [tableData setObject:details forKey:first];
+                [details addObject:childPath];
+                FilePath *filePath = [[FilePath alloc] init];
+                filePath.name = first;
+                filePath.childPaths = details;
+                filePath.image = [UIImage imageNamed:@"folder"];
+                [tableData addObject:filePath];
             }
+        }else{
+            NSArray *stringAndType = [path componentsSeparatedByString:@"."];
+            UIImage *image;
+            if ([stringAndType count] > 1 && ([[stringAndType lastObject] isEqualToString:@"png"] || [[stringAndType lastObject] isEqualToString:@"jpg"])) {
+                image = [UIImage imageWithContentsOfFile:[directoryPath stringByAppendingPathComponent:path]];
+            }else{
+                image = [UIImage imageNamed:@"folder"];
+            }
+            
+            FilePath *file = [[FilePath alloc] init];
+            file.name = path;
+            file.image = image;
+            file.childPaths = [NSMutableArray arrayWithCapacity:10];
+            [tableData addObject:file];
         }
     }
 //    NSLog(@"%@",tableData);
 }
 
 - (void)backAction:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)dismissAction:(id)sender{
     [self dismissViewControllerAnimated:YES completion:^{
         
     }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [tableData allKeys].count;
+    return tableData.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -88,7 +127,10 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DetailCell"];
     }
-    cell.textLabel.text = [[tableData allKeys] objectAtIndex:indexPath.row];
+    cell.backgroundColor = [UIColor clearColor];
+    FilePath *filePath = [tableData objectAtIndex:indexPath.row];
+    cell.textLabel.text = filePath.name;
+    cell.imageView.image = filePath.image;
     return cell;
 }
 
@@ -96,14 +138,19 @@
     return 69;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    FilePath *filePath = [tableData objectAtIndex:indexPath.row];
+    if ([filePath.childPaths count] < 1) {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        [cell setSelected:NO animated:YES];
+        return;
+    }
+    ImageViewController *controller = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ImageViewController"];
+    controller.isRoot = NO;
+    controller.directories = filePath.childPaths;
+    controller.directoryPath = [directoryPath stringByAppendingPathComponent:filePath.name];
+    controller.title = filePath.name;
+    [self.navigationController pushViewController:controller animated:YES];
 }
-*/
 
 @end

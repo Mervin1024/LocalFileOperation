@@ -8,7 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, BankButtonType) {
+    BankButtonTypeDismiss,
+    BankButtonTypeRevoke
+};
+
+@interface FilePath : NSObject
+
+@property (copy, nonatomic) NSString *name;
+@property (strong, nonatomic) NSMutableArray *childPaths;
+@property (copy, nonatomic) UIImage *image;
+
+@end
+
 @interface ImageViewController : UIViewController
 
 @property (strong, nonatomic) NSArray *directories;
+@property (copy, nonatomic) NSString *directoryPath;
+@property (assign, nonatomic) BOOL isRoot;
 @end

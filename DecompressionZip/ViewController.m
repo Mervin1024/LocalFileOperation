@@ -84,6 +84,9 @@
             UINavigationController *navController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ImageViewNavigationController"];
             ImageViewController *controller = (ImageViewController *)navController.topViewController;
             controller.directories = allDirectorise;
+            controller.directoryPath = zipDirectoryPath;
+            controller.isRoot = YES;
+            controller.title = fileName;
             [SVProgressHUD dismiss];
             [self presentViewController:navController animated:YES completion:nil];
         }
@@ -98,7 +101,8 @@
     NSString *zipPath = [[NSBundle mainBundle] pathForResource:name ofType:type];
     return zipPath;
 }
-- (IBAction)deleteAction:(id)sender {
+
+- (void)setData{
     [data removeAllObjects];
     for (int i = 1; i < 9; i++) {
         NSString *imageName = [NSString stringWithFormat:@"%d",(int)pow(2, i)];
@@ -108,6 +112,11 @@
         }
         [data addObject:imageName];
     }
+}
+
+- (IBAction)deleteAction:(id)sender {
+    [self setData];
+    
     CGRect frame = imageTableView.frame;
     frame.size.height = [data count] * 69;
     imageTableView.frame = frame;
@@ -147,16 +156,11 @@
         if (finished) {
             
             NSString *filePath = [self filePathOfName:[data objectAtIndex:indexPath.row] type:@"png"];
-//            NSLog(@"Delete filePath:%@",filePath);
             [self isFileExists:filePath];
-//            NSError *error = [[NSError alloc] init];
             BOOL delete = [fileManager removeItemAtPath:filePath error:nil];
-            
-//            [self isFileExists:filePath];
             
             if (!delete) {
                 [SVProgressHUD showErrorWithStatus:@"删除失败"];
-//                NSLog(@"%@",error);
             }else{
                 [SVProgressHUD showSuccessWithStatus:@"删除成功"];
             }
@@ -169,10 +173,10 @@
 
 - (BOOL)isFileExists:(NSString *)filePath{
     if ([fileManager fileExistsAtPath:filePath]) {
-        NSLog(@"文件存在");
+//        NSLog(@"文件存在");
         return YES;
     }else{
-        NSLog(@"文件不存在");
+//        NSLog(@"文件不存在");
         return NO;
     }
 }
